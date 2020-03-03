@@ -1,6 +1,13 @@
 package com.wyk.minimybatis.config;
 
+import com.wyk.minimybatis.executor.Executor;
+import com.wyk.minimybatis.executor.SimpleExecutor;
+import com.wyk.minimybatis.plug.InterceptorChain;
+import com.wyk.minimybatis.proxy.MapperProxy;
+import com.wyk.minimybatis.session.SqlSession;
 import lombok.Data;
+
+import java.lang.reflect.Proxy;
 
 /**
  * @Author: wyk
@@ -19,10 +26,24 @@ public class Configuration {
 
     private final MapperRegistory mapperRegistory;
 
+    protected final InterceptorChain interceptorChain = new InterceptorChain();
+
     private String scanPackageName;
 
     public Configuration(String scanPackageName) {
         this.scanPackageName = scanPackageName;
         mapperRegistory = new MapperRegistory(scanPackageName);
     }
+
+    public Executor newExecutor() {
+        Executor executor = new SimpleExecutor(this);
+        executor = (Executor) interceptorChain.pluginAll(executor);
+        return executor;
+    }
+
+    public <T> T getMapper(Class<T> clazz, SqlSession sqlSession) {
+        return (T) Proxy.newProxyInstance(this.getClass().getClassLoader(), new Class[]{clazz}, new MapperProxy(sqlSession, clazz));
+    }
+
+
 }

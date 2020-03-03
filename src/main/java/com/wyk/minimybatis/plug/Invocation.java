@@ -1,7 +1,5 @@
 package com.wyk.minimybatis.plug;
 
-import lombok.Data;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 

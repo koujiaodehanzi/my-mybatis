@@ -90,6 +90,8 @@ public class MapperRegistory {
 
     /**
      *  用于存储注解内容
+     *  key为 类名+方法名
+     *  value为
      */
     public Map<String, MapperData> getMethodMaping() {
         return methodMaping;

@@ -26,7 +26,17 @@ public class ResultSetHandler {
         this.configuration = configuration;
     }
 
-
+    /**
+     * 将返回的结果集封装为Bean
+     * @param pstmt
+     * @param mapperData
+     * @param <E>
+     * @return
+     * @throws SQLException
+     * @throws NoSuchMethodException
+     * @throws InvocationTargetException
+     * @throws IllegalAccessException
+     */
     public <E> E handle(PreparedStatement pstmt, MapperRegistory.MapperData mapperData) throws SQLException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         Object obj = new DefaultObjectFactory().create(mapperData.getType());
 
@@ -40,6 +50,7 @@ public class ResultSetHandler {
 
         return (E) obj;
     }
+
 
     private void setValue(Object obj, Field field, ResultSet rs, int i) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, SQLException {
         Method method = obj.getClass().getMethod("set" + StringUtil.firstCharSwapHigh(field.getName()), field.getType());

@@ -31,7 +31,7 @@ public class DefaultSqlSession implements SqlSession {
 
     @Override
     public <T> T getMapper(Class<T> clazz) {
-        return (T) Proxy.newProxyInstance(this.getClass().getClassLoader(), new Class[]{clazz}, new MapperProxy(this, clazz));
+        return configuration.getMapper(clazz,this);
     }
 
     @Override
